@@ -1,13 +1,13 @@
-site_name: SMART Health Cards Framework
-repo_url: https://github.com/smart-on-fhir/health-cards
-edit_uri: 'edit/main/docs'
+site_name: SMART Health Cards Framework 日本語翻訳
+repo_url: https://github.com/shuuji3/health-cards
+edit_uri: 'edit/lang-ja/docs'
 
 
 nav:
-  - Protocol: index.md
-  - Credential Modeling: credential-modeling.md
-  - Credential Types: vocabulary.md
-  - Examples: examples/index.md
+  - プロトコル: index.md
+  - 証明書のモデル: credential-modeling.md
+  - 証明書のタイプ: vocabulary.md
+  - 実装例: examples/index.md
   - Changelog: changelog.md
 
 theme:
