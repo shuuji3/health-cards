@@ -2,22 +2,22 @@
 
 # FHIRで検証可能な医療情報
 
-This document describes how clinical information, modeled in [FHIR][fhir], can be presented in a form based on [W3C Verifiable Credentials][vc] (VC).
+このドキュメントでは、[FHIR][fhir]でモデル化された医療情報を[W3C Verifiable Credentials][vc]（VC）基づいてどのように表現するのかを説明します。
 
 ## コンテンツの定義
 
-Any time we want to present verifiable clinical information, we must first make some use-case-specific decisions:
+検証可能な医療情報を提示したい場合には、まずはじめにユースケース特有の決定を行う必要があります。
 
-1. Define a set of required and optional **FHIR content resources** (e.g., `Immunization` or `Observation`) that must be packaged and presented together
-2. Decide how to bind these FHIR content resources to a person's external identity, via **FHIR identity resources** (e.g., `Patient`)
+1. 合わせてパッケージ化されて維持されなければならない、一連の必須およびオプションの**FHIR content resources**（例：`Immunization`や`Observation`など）を決める
+2. これらのFHIR content resourcesを、**FHIR identity resources**（例：`Patient`）を経由して、個人の外部のIDと紐付ける方法を決める
 
-Once we make these decisions, we can construct a VC with a **credential subject** as follows:
+これらの決定を行えば、**credential subject**を使用してVCを次のように構成できます。
 
-* `credentialSubject` with these top level elements:
+* `credentialSubject`に以下のトップレベル要素を持たせる
     * `fhirVersion`: a string representation of the semantic FHIR version the content is represented in (e.g. `1.0.*` for DSTU2, `4.0.*` for R4, where `*` is a number, not a literal asterisk)
     * `fhirBundle`: a FHIR `Bundle` resource of type "collection" that includes all required FHIR resources (content + identity resources)
 
-Resulting payload for the `"credentialSubject"`:
+`"credentialSubject"`のpayloadは次のような結果になります。
 
 ```js
 {
@@ -32,13 +32,13 @@ Resulting payload for the `"credentialSubject"`:
 }
 ```
 
-> Below we focus on the Health Card use case, but the same approach to forming VCs out of FHIR can be applied to other use cases, too.
+> 以下ではHealth Cardのユースケースにフォーカスしていますが、FHIRからVCを構築する同様のアプローチは他のユースケースにも適用できます。
 
 ## 「Health Card」をモデル化する
 
-A "Health Card" is a VC that conveys results about one discrete topic -- **in this example, a COVID-19 immunization card**, encompassing details about doses given. Other cards could convey details of a RT-PCR test for COVID-19, a clinical diagnosis of COVID-19, TDAP vaccination, and so on.
+「Health Card」は、1つの独立したトピックに関する結果を伝達するVCです。この例では、ワクチン接種の詳細が記録された**COVID-19の免疫カード**です。他のカードとしては、たとえば、COVID-19のRT-PCRテストの詳細、COVID-19の診断結果、TDAPワクチンなどが考えられます。
 
-According to the procedure above, we start with decisions about FHIR content resources and identity resources:
+上記のプロシージャにしたがって、まずはじめに、FHIR content resourcesとIDリソースについて決定を行います。
 
 * Which **FHIR content resources** need to be conveyed in a package? For the immunization example, we'd need:
     * `Immunization` with details about a first dose (product, date of administration, and administering provider)
@@ -46,17 +46,17 @@ According to the procedure above, we start with decisions about FHIR content res
 
 * What **FHIR identity resources** do we need to bind the FHIR content resources to an external identity system? We might eventually define use-case-specific requirements, but we want to start with a recommended set of data elements for inclusion using the FHIR `Patient` resource. Resources MAY include an overall "level of assurance" indicating whether these demographic elements have been verified.
 
-    * Best practices
+    * ベストプラクティス
         * Verifiers should not store identity data conveyed via VC, and should delete data as soon as they are no longer needed for verification purposes
         * Verifiers should not expect all elements in the VC to exactly match their own records, but can still use elements conveyed in the VC.
 
 ## W3C VC Data Modelにマッピングする
 
-To create a structure matching the W3C Verifiable Credential [JSON-LD Syntax](https://www.w3.org/TR/vc-data-model/#json-ld) from a SMART Health Card JWS:
+SMART Health Card JWSからW3C Verifiable Credential [JSON-LD Syntax](https://www.w3.org/TR/vc-data-model/#json-ld)に一致する構造を作るために、次のことを行います。
 
-1. De-compress the JWS payload
+1. JWS payloadの圧縮を解除する
 
-2. Add to the `.vc` object:
+2. `.vc`オブジェクトに追加する。
 
    ```
    "@context": [
@@ -71,9 +71,9 @@ To create a structure matching the W3C Verifiable Credential [JSON-LD Syntax](ht
    ]
    ```
 
-3. Prepend to the `.vc.type` array: `"VerifiableCredential"`
+3. `.vc.type`配列の最後に追加する: `"VerifiableCredential"`
 
-4. Process the payload according to [JWT Decoding Rules](https://www.w3.org/TR/vc-data-model/#jwt-decoding)
+4. [JWT Decoding Rules](https://www.w3.org/TR/vc-data-model/#jwt-decoding)に従ってpayloadを処理する
 
 ### Health Cardの例
 
