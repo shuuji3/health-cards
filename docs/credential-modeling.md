@@ -1,10 +1,10 @@
 > このページは、[SMART Health Cards Framework](https://spec.smarthealth.cards/)の日本語翻訳です。SMART Health Cardsの仕様を日本語で理解する助けとなることを目的に提供しているものです。最新の情報については、オリジナルのウェブサイトを参照してください。
 
-# Verifiable Clinical Information in FHIR
+# FHIRで検証可能な医療情報
 
 This document describes how clinical information, modeled in [FHIR][fhir], can be presented in a form based on [W3C Verifiable Credentials][vc] (VC).
 
-## Content Definition
+## コンテンツの定義
 
 Any time we want to present verifiable clinical information, we must first make some use-case-specific decisions:
 
@@ -34,7 +34,7 @@ Resulting payload for the `"credentialSubject"`:
 
 > Below we focus on the Health Card use case, but the same approach to forming VCs out of FHIR can be applied to other use cases, too.
 
-## Modeling a "Health Card"
+## 「Health Card」をモデル化する
 
 A "Health Card" is a VC that conveys results about one discrete topic -- **in this example, a COVID-19 immunization card**, encompassing details about doses given. Other cards could convey details of a RT-PCR test for COVID-19, a clinical diagnosis of COVID-19, TDAP vaccination, and so on.
 
@@ -50,7 +50,7 @@ According to the procedure above, we start with decisions about FHIR content res
         * Verifiers should not store identity data conveyed via VC, and should delete data as soon as they are no longer needed for verification purposes
         * Verifiers should not expect all elements in the VC to exactly match their own records, but can still use elements conveyed in the VC.
 
-## Mapping into the W3C VC Data Model
+## W3C VC Data Modelにマッピングする
 
 To create a structure matching the W3C Verifiable Credential [JSON-LD Syntax](https://www.w3.org/TR/vc-data-model/#json-ld) from a SMART Health Card JWS:
 
@@ -75,7 +75,7 @@ To create a structure matching the W3C Verifiable Credential [JSON-LD Syntax](ht
 
 4. Process the payload according to [JWT Decoding Rules](https://www.w3.org/TR/vc-data-model/#jwt-decoding)
 
-### Health Card Examples
+### Health Cardの例
 
 * [Example VC payloads](https://smarthealth.cards/examples/)
 

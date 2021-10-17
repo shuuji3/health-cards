@@ -444,13 +444,13 @@ No. SMART Health Cards are designed for use *alongside* existing forms of identi
     * decision-making rules may be determined or influenced by international, national and local health authorities.
     * decision-making rules may require many inputs, some of which can be supplied by Health Cards and others of which may come from elsewhere (e.g., by asking the user "are you experiencing any symptoms today?").
 
-## How can we share conclusions like a "Safe-to-fly Pass", instead of sharing clinical results?
+## 臨床結果を共有する代わりに「Safe-to-fly Pass」のような結論を共有するにはどうすればいいですか？
 
 Decision-making often results in a narrowly-scoped "Pass" that embodies conclusions like "Person X qualifies for international flight between Country A and Country B, according to Rule Set C". While Health Cards are designed to be long-lived and general-purpose, Passes are highly contextual. We are not attempting to standardize "Passes" in this framework, but Health Cards can provide an important verifiable input for the generation of Passes.
 
-## What testing tools are available to validate SMART Health Cards implementations?
+## SMART Health Cardsの実装を検証できるテストツールはありますか？
 
-The following tools are helpful to validate Health Card artifacts:
+以下のようなHealth Cardアーティファクトの検証に役に立つツールがあります。
 
 * The [HL7 FHIR Validator](https://confluence.hl7.org/display/FHIR/Using+the+FHIR+Validator) can be used to validate the Health Card's FHIR bundle
 * The [Health Cards Dev Tools](https://github.com/smart-on-fhir/health-cards-dev-tools) can be used to validate the various Health Card artifacts.
@@ -460,9 +460,9 @@ Other resources that are helpful for learning about and implementing SMART Healt
 * The [code used to generate the examples](https://github.com/smart-on-fhir/health-cards/tree/main/generate-examples) present in the spec.
 * A [Jupyter Notebook walkthrough](https://github.com/dvci/health-cards-walkthrough/blob/main/SMART%20Health%20Cards.ipynb) and [demo portals](https://demo-portals.smarthealth.cards/) which demonstrate creating, validating and decoding a SMART Health Card as a QR code.
 
-## SMART Health Cards What software libraries are available to work with SMART Health Cards?
+## SMART Health Cardsと協調できるソフトウェアライブラリはありますか？
 
-The [Libraries for SMART Health Cards](https://github.com/smart-on-fhir/health-cards/wiki/Libraries-for-SMART-Health-Cards) wiki page includes suggestions about useful libraries.
+[Libraries for SMART Health Cards](https://github.com/smart-on-fhir/health-cards/wiki/Libraries-for-SMART-Health-Cards)というwikiページに、便利なライブラリのおすすめがあります。
 
 # Potential Extensions
 
