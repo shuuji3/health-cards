@@ -435,22 +435,22 @@
 <p>このページは、<a href="https://spec.smarthealth.cards/">SMART Health Cards Framework</a>の日本語翻訳です。SMART Health Cardsの仕様を日本語で理解する助けとなることを目的に提供しているものです。最新の情報については、オリジナルのウェブサイトを参照してください。</p>
 </blockquote>
 <h2 id="fhir">FHIRで検証可能な医療情報<a class="headerlink" href="#fhir" title="Permanent link">&para;</a></h2>
-<p>This document describes how clinical information, modeled in <a href="https://hl7.org/fhir">FHIR</a>, can be presented in a form based on <a href="https://w3c.github.io/vc-data-model/">W3C Verifiable Credentials</a> (VC).</p>
+<p>このドキュメントでは、<a href="https://hl7.org/fhir">FHIR</a>でモデル化された医療情報を<a href="https://w3c.github.io/vc-data-model/">W3C Verifiable Credentials</a>（VC）基づいてどのように表現するのかを説明します。</p>
 <h3 id="_1">コンテンツの定義<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
-<p>Any time we want to present verifiable clinical information, we must first make some use-case-specific decisions:</p>
+<p>検証可能な医療情報を提示したい場合には、まずはじめにユースケース特有の決定を行う必要があります。</p>
 <ol>
-<li>Define a set of required and optional <strong>FHIR content resources</strong> (e.g., <code>Immunization</code> or <code>Observation</code>) that must be packaged and presented together</li>
-<li>Decide how to bind these FHIR content resources to a person's external identity, via <strong>FHIR identity resources</strong> (e.g., <code>Patient</code>)</li>
+<li>合わせてパッケージ化されて維持されなければならない、一連の必須およびオプションの<strong>FHIR content resources</strong>（例：<code>Immunization</code>や<code>Observation</code>など）を決める</li>
+<li>これらのFHIR content resourcesを、<strong>FHIR identity resources</strong>（例：<code>Patient</code>）を経由して、個人の外部のIDと紐付ける方法を決める</li>
 </ol>
-<p>Once we make these decisions, we can construct a VC with a <strong>credential subject</strong> as follows:</p>
+<p>これらの決定を行えば、<strong>credential subject</strong>を使用してVCを次のように構成できます。</p>
 <ul>
-<li><code>credentialSubject</code> with these top level elements:<ul>
+<li><code>credentialSubject</code>に以下のトップレベル要素を持たせる<ul>
 <li><code>fhirVersion</code>: a string representation of the semantic FHIR version the content is represented in (e.g. <code>1.0.*</code> for DSTU2, <code>4.0.*</code> for R4, where <code>*</code> is a number, not a literal asterisk)</li>
 <li><code>fhirBundle</code>: a FHIR <code>Bundle</code> resource of type "collection" that includes all required FHIR resources (content + identity resources)</li>
 </ul>
 </li>
 </ul>
-<p>Resulting payload for the <code>"credentialSubject"</code>:</p>
+<p><code>"credentialSubject"</code>のpayloadは次のような結果になります。</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
   <span class="s2">&quot;...&quot;</span><span class="p">,</span>
   <span class="s2">&quot;fhirVersion&quot;</span><span class="o">:</span> <span class="s2">&quot;4.0.1&quot;</span><span class="p">,</span>
@@ -463,11 +463,11 @@
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
-<p>Below we focus on the Health Card use case, but the same approach to forming VCs out of FHIR can be applied to other use cases, too.</p>
+<p>以下ではHealth Cardのユースケースにフォーカスしていますが、FHIRからVCを構築する同様のアプローチは他のユースケースにも適用できます。</p>
 </blockquote>
 <h3 id="health-card">「Health Card」をモデル化する<a class="headerlink" href="#health-card" title="Permanent link">&para;</a></h3>
-<p>A "Health Card" is a VC that conveys results about one discrete topic -- <strong>in this example, a COVID-19 immunization card</strong>, encompassing details about doses given. Other cards could convey details of a RT-PCR test for COVID-19, a clinical diagnosis of COVID-19, TDAP vaccination, and so on.</p>
-<p>According to the procedure above, we start with decisions about FHIR content resources and identity resources:</p>
+<p>「Health Card」は、1つの独立したトピックに関する結果を伝達するVCです。この例では、ワクチン接種の詳細が記録された<strong>COVID-19の免疫カード</strong>です。他のカードとしては、たとえば、COVID-19のRT-PCRテストの詳細、COVID-19の診断結果、TDAPワクチンなどが考えられます。</p>
+<p>上記のプロシージャにしたがって、まずはじめに、FHIR content resourcesとIDリソースについて決定を行います。</p>
 <ul>
 <li>
 <p>Which <strong>FHIR content resources</strong> need to be conveyed in a package? For the immunization example, we'd need:</p>
@@ -479,7 +479,7 @@
 <li>
 <p>What <strong>FHIR identity resources</strong> do we need to bind the FHIR content resources to an external identity system? We might eventually define use-case-specific requirements, but we want to start with a recommended set of data elements for inclusion using the FHIR <code>Patient</code> resource. Resources MAY include an overall "level of assurance" indicating whether these demographic elements have been verified.</p>
 <ul>
-<li>Best practices<ul>
+<li>ベストプラクティス<ul>
 <li>Verifiers should not store identity data conveyed via VC, and should delete data as soon as they are no longer needed for verification purposes</li>
 <li>Verifiers should not expect all elements in the VC to exactly match their own records, but can still use elements conveyed in the VC.</li>
 </ul>
@@ -488,13 +488,13 @@
 </li>
 </ul>
 <h3 id="w3c-vc-data-model">W3C VC Data Modelにマッピングする<a class="headerlink" href="#w3c-vc-data-model" title="Permanent link">&para;</a></h3>
-<p>To create a structure matching the W3C Verifiable Credential <a href="https://www.w3.org/TR/vc-data-model/#json-ld">JSON-LD Syntax</a> from a SMART Health Card JWS:</p>
+<p>SMART Health Card JWSからW3C Verifiable Credential <a href="https://www.w3.org/TR/vc-data-model/#json-ld">JSON-LD Syntax</a>に一致する構造を作るために、次のことを行います。</p>
 <ol>
 <li>
-<p>De-compress the JWS payload</p>
+<p>JWS payloadの圧縮を解除する</p>
 </li>
 <li>
-<p>Add to the <code>.vc</code> object:</p>
+<p><code>.vc</code>オブジェクトに追加する。</p>
 </li>
 </ol>
 <div class="highlight"><pre><span></span><code>&quot;@context&quot;: [
@@ -510,10 +510,10 @@
 </code></pre></div>
 <ol>
 <li>
-<p>Prepend to the <code>.vc.type</code> array: <code>"VerifiableCredential"</code></p>
+<p><code>.vc.type</code>配列の最後に追加する: <code>"VerifiableCredential"</code></p>
 </li>
 <li>
-<p>Process the payload according to <a href="https://www.w3.org/TR/vc-data-model/#jwt-decoding">JWT Decoding Rules</a></p>
+<p><a href="https://www.w3.org/TR/vc-data-model/#jwt-decoding">JWT Decoding Rules</a>に従ってpayloadを処理する</p>
 </li>
 </ol>
 <h4 id="health-card_1">Health Cardの例<a class="headerlink" href="#health-card_1" title="Permanent link">&para;</a></h4>
