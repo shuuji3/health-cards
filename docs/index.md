@@ -1,105 +1,105 @@
-# Overview
+# 概要
 
-### Looking for a non-technical overview?
+### 技術的でない概要について探していますか？
 
-See the [SMART Health Cards public landing page](https://smarthealth.cards/). Otherwise, read on for the technical specifications.
+[SMART Health Cards public landing page](https://smarthealth.cards/)を見てください。それ以外の場合は、技術仕様を読んでください。
 
-### Status
+### ステータス
 
-Stable first release authored with input from technology, lab, pharmacy, Electronic Health Record, and Immunization Information System vendors.
+テクノロジー企業、研究所、薬局、電子的な健康記録、および免疫情報システムのベンダーからの意見をまとめて作成された最初の安定版のリリースです。
 
-### Contributing
+### コントリビューション
 
-To propose changes, please use GitHub [Issues](https://github.com/smart-on-fhir/health-cards/issues) or create a [Pull Request](https://github.com/smart-on-fhir/health-cards/pulls).
+変更を提案するには、GitHub [Issues](https://github.com/smart-on-fhir/health-cards/issues)を使うか、[Pull Request](https://github.com/smart-on-fhir/health-cards/pulls)を送ってください。
 
-# Introduction
+# はじめに
 
-This implementation guide provides a framework for "Health Cards", with a short term goal to enable a consumer to receive COVID-19 Vaccination or Lab results and **present these results to another party in a verifiable manner**. Key use cases include conveying point-in-time infection status for return-to-workplace and travel. This approach should also support documentation of immunization status and other health details.
+この実装ガイドでは、「Health Cards」のためのフレームワークを提供します。短期的な目標は、消費者がCOVID-19ワクチンや検査結果を受け取れるようにし、**これらの結果を他のパーティに検証可能な方法で提示できるようにすることです**。主なユースケースには、職場への復帰や旅行のために特定時点での感染状況を伝えることなどがあります。このアプローチは、免疫状態やその他の健康状態のドキュメントもサポートできるはずです。
 
-Because we must ensure end-user privacy and because Health Cards must work across organizational and jurisdictional boundaries, we are building on international open standards and decentralized infrastructure.
+私たちはエンドユーザーのプライバシーを保証しなければならず、Health Cardsは組織や管轄区域の境界を超えて機能する必要があるため、国際的な標準と分散型のインフラストラクチャを構築しています。
 
-## Conceptual Model
+## 概念モデル
 
 ![Figure](https://i.imgur.com/T8RHjlJ.png)
 
-* **Issuer** (e.g., a lab, pharmacy, healthcare provider, EHR, public health department, or immunization information system) generates verifiable credentials
-* **Holder** stores credentials and presents them at will
-* **Verifier** receives credentials from holder and ensures they are properly signed
+* **Issuer**（たとえば、研究所、薬局、病院、EHR、公的な健康部門、免疫情報システムなど）は、検証可能な証明書を発行します。
+* **Holder**は、証明書を保管し、証明書を自由に提示します。
+* **Verifier**は、Holderから証明書を受け取り、適切に署名されていることを検証します。
 
+## 設計の目標
 
-## Design Goals
+* 関連する医療データをユーザーが受け取って提示する**エンド トゥ エンドのワークフロー**に対応すること
+* **オープンスタンダード**を使用したワークフローを可能にすること
+* 強力な**暗号学的署名**に対応すること
+* 特定のユースケースのために**プライバシーを保護する**データ表現を可能にすること
 
-* Support **end-to-end workflow** where users receive and present relevant healthcare data
-* Enable workflow with **open standards**
-* Support strong **cryptographic signatures**
-* Enable **privacy preserving** data presentations for specific use cases
+## 小さくはじめて、大きく考える
 
-## Start Small -- Think Big
+私たちは、ヘルスケアの様々な場所で利用できるビルディングブロックを定義することで、Health Cardsを実現します。コアとなるビルディングブロックを活用することで、私たちはデータを意味のあるまとまりに集約し、issuerは署名し、消費者は必要に応じて保管・提示ができるようになります。広範なユースケースとしては、最終的に次のようなものが可能になるかもしれません。
 
-We enable Health Cards by defining building blocks that can be used across healthcare. The core building block allows us to aggregate data into meaningful sets, signed by an issuer, and stored/presented by a consumer as needed. The broader set of use cases might eventually include:
+* 学校や雇用者、旅行のために共有できる、免疫記録を管理する
+* 検証可能な健康履歴のデータを臨床研究で共有する
+* 公衆衛生機関と自主的なデータを共有する
+* 医療提供者とアンケートの回答を共有する
 
-* Managing an immunization record that can be shared with schools or employers, or for travel
-* Sharing verifiable health history data with clinical research studies
-* Sharing voluntary data with public health agencies
-* Sharing questionnaire responses with healthcare providers
+このスコープは広範ですが、私たちに必要な*成功の短期的な定義*は次のように定められます。
 
-Despite this broad scope, our *short-term definition of success* requires that we:
+* COVID-19の状態にフォーカスした「Health Wallet」内の「Health Cards」を提示すること
+* それぞれの役割（issuer、holder、アプリ）は、関連する信頼フレームワークに署名する限り、以下のオープンスタンダードに従うことでどんな組織でも実装できることを保証すること
 
-* Represent "Health Cards" in a "Health Wallet", focusing on COVID-19 status
-* Ensure that each role (issuer, holder, app) can be implemented by any organization following open standards, provided they sign on to the relevant trust framework
+## ユーザーエクスペリエンスとデータフロー
 
-## User Experience and Data Flow
-
-* **User Receives** a Health Card from an Issuer. The Health Card is a signed data artifact that the user can obtain through any of these methods:
-    * issuer offers a Health Card on paper or PDF, including a QR code (required method)
-    * issuer offers a Health Card for download as a `.smart-health-card` file (required method)
+* **ユーザー**は、Health CardをIssuerから**受け取ります**。Health Cardは、ユーザーが以下のいずれかの手段で取得できる、署名されたデータアーティファクトです。
+    * issuerは、Health CardをQRコードを含む書類またはPDFで提供する（必要な手段）
+    * issuerは、Health Cardを`.smart-health-card`ファイルとしてダウンロードする手段を提供する（必要な手段）
     * issuer hosts a Health Card for [FHIR API access](#healthwalletissuevc-operation) via a compatible Health Wallet application. This workflow includes a SMART on FHIR authorization step with an Issuer, where the user grants read access to any resources that will be present in Health Cards (e.g., `Patient`, `Immunization`, `Observation`, `DiagnosticReport`)
-* **User Saves** a Health Card, whether on paper or digitally.
-* **User Presents** a Health Card to a Verifier. Presentation includes explicit user opt-in and approval, and may involve displaying a QR code, sharing a file, or using an on-device SDK (e.g., for verifier-to-holder app-to-app communications)
+    ユーザーにHealth Cards上に提示されるすべてのリソースへの読み取りアクセスを与える
+* **ユーザー**は、書類またはデジタルデータとしてHealth Cardを**保存します**。
+* **ユーザー**は、Health CardをVerifierに**提示します**。提示方法には、ユーザーの明示的なオプトインと承認があり、場合によっては、QRコードの提示、ファイルの共有、または、デバイス上のSDKの使用（たとえば、verifierからholderへのアプリ間通信のため）が関わる可能性があります。
 
-## Trust
+## 信頼
 
 Anyone can _issue_ Health Cards, and every verifier can make its own decision about which issuers to _trust_. A "trust framework" can help verifiers to externalize these decisions and drive toward more consistent practices. The SMART Health Cards IG is designed to operate independent of any trust framework, while allowing trust frameworks to be layered on top. We anticipate such frameworks will emerge to meet different jurisdictional and use case driven requirements. In all cases, verifiers can discover public keys associated with an issuer via `/.well-known/jwks.json` URLs.
 
-## Privacy
+## プライバシー
 
-### Data Minimization
+### データの最小化
 
 It is an explicit design goal to let the holder **only disclose a minimum amount of information** to a verifier. The information _required_ to be disclosed is use-case dependent, and -- particularly in a healthcare setting -- it can be difficult for lay people to judge which data elements are necessary to be shared.
 
 The granularity of information disclosure will be at the level of an entire credential (i.e., a user can select "which cards" to share from a Health Wallet, and each card is shared wholesale). The credentials are designed to only include the minimum information necessary for a given use case.
 
-### Granular Sharing
+### 細粒度の共有
 
 Data holders should have full control over the data they choose to share for a particular use-case. Since Health Cards are signed by the issuer and cannot be altered later, it is important to ensure that Health Cards are created with granular sharing in mind. Therefore, issuers SHOULD only combine distinct data elements into a Health Card when a Health Card FHIR profile requires it.
 
 Additionally, Health Card FHIR Profiles SHOULD only include data that need to be conveyed together. (e.g., immunizations for different diseases should be kept separate. Immunizations and lab results should be kept separate.)
 
-### Future Considerations
+### 将来の検討事項
 
 If we identify *optional* data elements for a given use case, we might incorporate them into credentials by including a cryptographic hash of their values instead of embedding values directly. Longer term we can provide more granular options using techniques like zero-knowledge proofs, or by allowing a trusted intermediary to summarize results in a just-in-time fashion.
 
-## Data Model
+## データモデル
 
 This framework defines a general approach to **representing demographic and clinical data in FHIR**, outlined in [Modeling Verifiable Credentials in FHIR](./credential-modeling/). Specific use cases for Health Cards will define specific data profiles.
 
   * **COVID-19 Vaccination Credentials**: See [SMART Health Cards: Vaccination IG](http://vci.org/ig/vaccination-and-testing)
 
-# Protocol Details
+# プロトコルの詳細
 
-## Generating and resolving cryptographic keys
+## 暗号学的キーの生成と解決
 
-The following key types are used in the Health Cards Framework:
+Health Cards Frameworkでは、以下のキーの種類が使用されます。
 
 * Elliptic Curve keys using the P-256 curve
 
-### Signing *Health Cards*
+### *Health Cards*への署名
 
 * Issuers sign Health Card VCs (Verifiable Credentials) with a signing key (private key)
 * Issuer publish the corresponding public key (public key) at `/.well-known/jwks.json`
 * Wallets and Verifiers use the public key to verify Issuer signatures on Health Cards
 
-### Determining keys associated with an issuer
+### issuerと関連付けられたキーを特定する
 
 Each public key used to verify signatures is represented as a JSON Web Key (see [RFC 7517](https://tools.ietf.org/html/rfc7517)):
 
@@ -135,7 +135,7 @@ For example, the following is a fragment of a `jwks.json` file with one signing 
 }
 ```
 
-### Certificates
+### 証明書
 
 X.509 certificates can be used by issuers to indicate the issuer's participation in a PKI-based trust framework.
 
@@ -150,7 +150,7 @@ the Verifier establishes that the issuer is trusted as follows:
 2. Verifier constructs a valid certificate path of unexpired and unrevoked certificates to one of its trusted anchors
  (see [RFC5280](https://tools.ietf.org/html/rfc5280#section-6)).
 
-### Key Management
+### キーの管理
 
 Issuers SHOULD generate new signing keys at least annually.
 
@@ -161,7 +161,7 @@ signed Health Cards SHALL remain in the JWK set for as long as the corresponding
 are clinically relevant. However, if a private signing key is compromised, then the issuer SHALL immediately remove the corresponding public key
 from the JWK set in its `jwks.json` file and request revocation of all X.509 certificates bound to that public key.
 
-## Issuer Generates Results
+## Issuerが結果を生成する
 
 When the issuer is ready to generate a Health Card, the issuer creates a FHIR payload and packs it into a corresponding Health Card VC (or Health Card Set).
 
@@ -183,7 +183,7 @@ note over Issuer, Holder: Later...
 Issuer ->> Holder: Holder receives Health Card
 ```
 
-### Health Cards are encoded as Compact Serialization JSON Web Signatures (JWS)
+### Health CardsはCompact Serialization JSON Web Signatures（JWS）としてエンコードされる
 
 The VC structure (scaffold) is shown in the following example. The Health Cards framework serializes VCs using the compact JWS serialization, where the payload is a compressed set of JWT claims (see [Appendix 3 of RFC7515](https://tools.ietf.org/html/rfc7515#appendix-A.3) for an example using ECDSA P-256 SHA-256, as required by this specification). Specific encoding choices ensure compatibility with standard JWT claims, as described at [https://www.w3.org/TR/vc-data-model/#jwt-encoding](https://www.w3.org/TR/vc-data-model/#jwt-encoding).
 
@@ -210,7 +210,7 @@ The `type`, and `credentialSubject` properties are added to the `vc` claim of th
 }
 ```
 
-### Health Cards are Small
+### Health Cardsはサイズが小さい
 
 To ensure that all Health Cards can be represented in QR codes, issuers SHALL ensure that the following constraints apply at the time of issuance:
 
@@ -232,11 +232,11 @@ To ensure that all Health Cards can be represented in QR codes, issuers SHALL en
 
 For details about how to embed Health Cards in a QR code, [see below](#every-health-card-can-be-embedded-in-a-qr-code).
 
-## User Retrieves Health Cards
+## UserがHealth Cardsを取得する
 
 In this step, the user learns that a new Health Card is available (e.g., by receiving a text message or email notification, or by an in-wallet notification for FHIR-enabled issuers.)
 
-### via File Download
+### ファイルのダウンロードによる方法
 
 To facilitate this workflow, the issuer can include a link to help the user download the credentials directly, e.g., from a login-protected page in the Issuer's patient portal. The file SHALL be served with a `.smart-health-card` file extension and SHALL be provided with a MIME type of `application/smart-health-card` (e.g., web servers SHALL include `Content-Type: application/smart-health-card` as an HTTP Response containing a Health Card), so the Health Wallet app can be configured to recognize this extension and/or MIME type. Contents should be a JSON object containing an array of Verifiable Credential JWS strings:
 
@@ -249,17 +249,17 @@ To facilitate this workflow, the issuer can include a link to help the user down
 }
 ```
 
-### via QR (Print or Scan)
+### QRコードによる方法（印刷またはスキャン）
 
 Alternatively, issuers can make any individual JWS inside a Health Card available **embedded in a QR code** (for instance, printed on a paper-based vaccination record or after-visit summary document). See [details](#every-health-card-can-be-embedded-in-a-qr-code).
 
 Finally, the Health Wallet asks the user if they want to save any/all of the supplied credentials.
 
-### via FHIR `$health-cards-issue` Operation
+### FHIR `$health-cards-issue` Operationによる方法
 
 For a more seamless user experience when FHIR API connections are already in place, results may also be conveyed through a FHIR API `$health-cards-issue` operation defined [here](../artifacts/operation-patient-i-health-cards-issue.json). For issuers that support SMART on FHIR access, the Health Wallet MAY request authorization with SMART on FHIR scopes (e.g., `launch/patient patient/Immunization.read` for an Immunization use case). This allows the Health Wallet to automatically request issuance of VCs, including requests for periodic updates.
 
-#### Discovery of FHIR Support
+#### FHIRサポートの検出
 
 A SMART on FHIR Server capable of issuing VCs according to this specification SHALL advertise its support by adding the `health-cards` capability to its `/.well-known/smart-configuration` JSON file. For example:
 
@@ -370,11 +370,11 @@ In the response, an optional repeating `resourceLink` parameter can capture the 
 }
 ```
 
-## Presenting Health Cards to a Verifier
+## Health CardsをVerifierに提示する
 
 In this step, the verifier asks the user to share a COVID-19 result. A Health Card containing the result can be conveyed by presenting a QR code; by uploading a file; or by leveraging device-specific APIs. Over time, we will endeavor to standardize presentation workflows including device-specific patterns and web-based exchange.
 
-## Every Health Card can be embedded in a QR code
+## すべてのHealth CardはQRコードに埋め込める
 
 Each JWS string that appears in the `.verifiableCredential[]` of a `.smart-health-card` file can be embedded in one or more QR codes. We aim to ensure that printed (or electronically displayed) codes are usable at physical dimensions of 40mmx40mm. This constraint allows us to use QR codes up to Version 22, at 105x105 modules. When embedding a JWS string in QR codes, the JWS string SHALL be encoded as Numerical Mode QR codes consisting of the digits 0-9 (see ["Encoding Chunks as QR codes"](#encoding-chunks-as-qr-codes)).
 
@@ -391,9 +391,9 @@ The following limitations apply when presenting Health Card as QR codes, rather 
   * Verifier cannot include purposes of use in-band
 * Does not capture a digital record of the presentation
 
-## Creating a QR code (or a set of QR codes) from a Health Card JWS
+## Health Card JWSからQRコード（または複数のQRコードセット）を生成する
 
-### Chunking
+### チャンク化
 
 Commonly, Health Cards will fit in a single V22 QR code. Any JWS longer than 1195 characters SHALL be split into "chunks" of length 1191 or smaller; each chunk SHALL be encoded as a separate QR code of V22 or lower, to ensure ease of scanning. Each chunk SHALL be numerically encoded and prefixed with an ordinal as well as the total number of chunks required to re-assemble the JWS, as described below. The [QR code FAQ page](https://github.com/smart-on-fhir/health-cards/blob/main/FAQ/qr.md) details max JWS length restrictions at various error correction levels.
 
@@ -402,7 +402,7 @@ To ensure the best user experience when producing and consuming multiple QR code
 * Producers of QR codes SHOULD balance the sizes of chunks. For example, if a JWS is 1200 characters long, producers should create two ~600 character chunks rather than a 1191 character chunk and a 9 character chunk.
 * Consumers of QR codes SHOULD allow for scanning the multiple QR codes in any order. Once the full set is scanned, the JWS can be assembled and validated.
 
-### Encoding Chunks as QR codes
+### チャンクをQRコードとしてエンコードする
 
 When printing or displaying a Health Card using QR codes, let "N" be the total number of chunks required, and let "C" be a variable indicating the index of the current chunk. Each chunk of the JWS string value SHALL be represented as a QR with two data segments:
 
@@ -426,13 +426,13 @@ When reading a QR code, scanning software can recognize a SMART Health Card from
 
 ---
 
-# FAQ
+# よくある質問
 
-## Can a SMART Health Card be used as a form of identification?
+## SMART Health Cardは、身分証明書の形式として利用できますか？
 
 No. SMART Health Cards are designed for use *alongside* existing forms of identification (e.g., a driver's license in person, or an online ID verification service). A SMART Health Card is a non-forgeable digital artifact analogous to a paper record on official letterhead. Concretely, the problem SMART Health Cards solve is one of provenance: a digitally signed SMART Health Card is a credential that guarantees that a specific issuer generated the record. The duty of verifying that the person presenting a Health Card *is* the subject of the data within the Health Card (or is authorized to act on behalf of this data subject) falls to the person or system receiving and validating a Health Card.
 
-## Which clinical data should be considered in decision-making?
+## 意思決定ではどの医療データが考慮されるべきですか？
 
 * The data in Health Cards should focus on communicating "immutable clinical facts".
 * Each use case will define specific data profiles.
@@ -458,7 +458,7 @@ Other resources that are helpful for learning about and implementing SMART Healt
 * The [code used to generate the examples](https://github.com/smart-on-fhir/health-cards/tree/main/generate-examples) present in the spec.
 * A [Jupyter Notebook walkthrough](https://github.com/dvci/health-cards-walkthrough/blob/main/SMART%20Health%20Cards.ipynb) and [demo portals](https://demo-portals.smarthealth.cards/) which demonstrate creating, validating and decoding a SMART Health Card as a QR code.
 
-## What software libraries are available to work with SMART Health Cards?
+## SMART Health Cards What software libraries are available to work with SMART Health Cards?
 
 The [Libraries for SMART Health Cards](https://github.com/smart-on-fhir/health-cards/wiki/Libraries-for-SMART-Health-Cards) wiki page includes suggestions about useful libraries.
 
@@ -468,7 +468,7 @@ The [Libraries for SMART Health Cards](https://github.com/smart-on-fhir/health-c
 
 The spec is currently focused on representing Health Cards in a standardized data payload. This allows many simple patterns for sharing, but future work can introduce standardized presentation exchange flows (e.g., OpenID Self-Issued Identity Provider, a.k.a. SIOP)
 
-# References
+# リファレンス
 
 * Fast Health Interoperability Resources (FHIR): [https://hl7.org/fhir/](https://hl7.org/fhir/)
 * DEFLATE Compression: [https://tools.ietf.org/html/rfc1951](https://tools.ietf.org/html/rfc1951)
