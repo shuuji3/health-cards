@@ -1,3 +1,5 @@
+> このページは、[SMART Health Cards Framework](https://spec.smarthealth.cards/)の日本語翻訳です。SMART Health Cardsの仕様を日本語で理解する助けとなることを目的に提供しているものです。最新の情報については、オリジナルのウェブサイトを参照してください。
+
 # 概要
 
 ### 技術的でない概要について探していますか？

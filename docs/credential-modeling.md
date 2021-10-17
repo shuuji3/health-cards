@@ -1,3 +1,5 @@
+> このページは、[SMART Health Cards Framework](https://spec.smarthealth.cards/)の日本語翻訳です。SMART Health Cardsの仕様を日本語で理解する助けとなることを目的に提供しているものです。最新の情報については、オリジナルのウェブサイトを参照してください。
+
 # Verifiable Clinical Information in FHIR
 
 This document describes how clinical information, modeled in [FHIR][fhir], can be presented in a form based on [W3C Verifiable Credentials][vc] (VC).
