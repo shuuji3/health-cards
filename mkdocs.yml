@@ -12,6 +12,7 @@ nav:
 
 theme:
   name: material
+  language: ja
 
 markdown_extensions:
   - toc:
@@ -40,3 +41,7 @@ extra_javascript:
 
 extra_css:
     - style.css
+
+extra:
+  search:
+    language: 'jp'
