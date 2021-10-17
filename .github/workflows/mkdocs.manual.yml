@@ -1,8 +1,8 @@
-name: Publish docs via GitHub Pages
+name: Publish docs via GitHub Pages for Japanese translation
 on:
   push:
     branches:
-      - main
+      - lang-ja
 
 jobs:
   build:
@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v1
+        with:
+          ref: lang-ja
       - name: Build examples
         run: |
           cd generate-examples
