@@ -1,10 +1,10 @@
-# Related Projects FAQ (Draft)
+# 関連プロジェクトに関するFAQ（草稿）
 
 ## WHO "Smart Vaccination Certificates" RC1
 
 On March 19th, 2021, the WHO released [Interim guidance for developing a Smart Vaccination Certificate](https://www.who.int/publications/m/item/interim-guidance-for-developing-a-smart-vaccination-certificate). Here are some key distinctions to keep in mind with respect to WHO RC1:
 
-1. Project names
+1. プロジェクト名
 
     * "**SMART**" in SMART Health Cards refers to the [SMART Health IT project](https://smarthealthit.org/about-smart-2/), and stands for "_Substitutable Medical Applications, Reusable Technologies_".
     * "**Smart**" in WHO's Smart Vaccination Certificates is unrelated to SMART Health IT or SMART on FHIR.

@@ -1,6 +1,6 @@
-# Security FAQ (Draft)
+# セキュリティに関するFAQ（草稿）
 
-## Issuer
+## 発行者（Issuer）
 
 ### Can someone steal my keys?
 
@@ -27,7 +27,7 @@ If you don't recognize the key, are they tricking verifiers into thinking you ar
 
 Expired private keys should be deleted, the corresponding public keys should stay in the issuer published key set to allow verifiers to validate health cards issued using them. Revoked private keys (compromised, issued in error, etc.) should be deleted and removed from the published key set.
 
-## User
+## ユーザー（User）
 
 ### Can someone steal my health card?
 
@@ -41,7 +41,7 @@ A health card file is a normal file, you can make back-ups. The QR code on a pap
 
 All the content of the health card is disclosed when presenting it. Issuers, wallet applications, and QR paper cards should clearly indicate what information is encoded and disclosed when presenting a health card.
 
-## Verifier
+## 検証者（Verifier）
 
 ### How do I recognize forged health cards?
 

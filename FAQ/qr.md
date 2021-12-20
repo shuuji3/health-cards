@@ -1,6 +1,6 @@
-# QR Code FAQ
+# QRコードに関するFAQ
 
-### JWS Max Length for V22 QR at Various Error Correction Levels
+### さまざまなエラー訂正レベルでのV22 QRに必要なJWSの最大長
 
 A single, non-chunked Version 22 SMART Health Card QR contains two segments
 * The first Byte mode segment (`shc:/`) always has 20 header bits and 40 data bits for a total of 60 bits.[<sup>1</sup>](https://www.nayuki.io/page/optimal-text-segmentation-for-qr-codes)
@@ -11,7 +11,7 @@ The max JWS size that can fit in a single Version 22 QR code depends on the rema
 76 bits are already reserved for the required segment headers and `shc:/` prefix. The following table lists the total number of bits a Version 22 QR Code can contain.
 
 
-| Error Correction Level | Total data bits for V22 QR |
+| エラー訂正レベル | V22 QRの合計データビット |
 | ------------- | ------------- |
 | Low  | 8048  |
 | Medium  | 6256  |
@@ -21,24 +21,23 @@ The max JWS size that can fit in a single Version 22 QR code depends on the rema
 [<sup>2 (Table Source)</sup>](https://www.qrcode.com/en/about/version.html)
 
 
-Each JWS character is encoded into two numeric characters (As described in [Encoding Chunks as QR codes](https://spec.smarthealth.cards/#encoding-chunks-as-qr-codes))
-and each numeric character requires 20/6 bits.[<sup>1</sup>](https://www.nayuki.io/page/optimal-text-segmentation-for-qr-codes)
+[Encoding Chunks as QR codes](https://shuuji3.xyz/smart-health-cards-framefork/#encoding-chunks-as-qr-codes)に記述されているように、JWSの各文字は2文字の数字にエンコードされます。そして、各数字は20/6ビットを必要とします。[<sup>1</sup>](https://www.nayuki.io/page/optimal-text-segmentation-for-qr-codes)
 
-Thus we can determine the maximum JWS size for each error correction with the following:
+したがって、それぞれのエラー訂正ごとのJWSの最大サイズを次のように決定できます。
 
-JWS Size
-=  ((Total Data Bits - 76 bits reserved) * 6/20 bits per numeric character * 1/2 JWS character per numeric character
-= (Total Data Bits - 76)*3/20
+JWSのサイズ
+=  ((データの合計ビット数 - 76 bits reserved) * 6/20 bits per 数字1文字 * 1/2 JWS 文字 per 数字1文字
+= (データの合計ビット数 - 76)*3/20
 
-The results of the above rounded down to the nearest integer number of characters gives:
+上記の結果を最も近い整数に切り捨てた文字数は、次のように与えられます。
 
-| Error Correction Level | Max JWS Length for V22 QR |
+| エラー訂正レベル | V22 QRに必要なJWSの最大長 |
 | ------------- | ------------- |
 | Low  | 1195  |
 | Medium  | 927  |
 | Quartile  | 670  |
 | High  | 519  |
 
-**References:**
+**リファレンス:**
 1. [Project Nayuki: Optimal text segmentation for QR Codes](https://www.nayuki.io/page/optimal-text-segmentation-for-qr-codes)
 2. [QR Code capacities](https://www.qrcode.com/en/about/version.html)
